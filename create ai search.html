@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Archaeological Image Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+    }
+    input[type=text] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 80%;
+      max-width: 500px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-gap: 20px;
+      margin-top: 20px;
+    }
+    .result-item {
+      text-align: center;
+    }
+    .result-item img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Archaeological Image Search</h1>
+  </header>
+  <main>
+    <input type="text" id="searchInput" placeholder="Search for archaeological objects">
+    <button onclick="searchImages()">Search</button>
+    <div id="results"></div>
+  </main>
+
+  <script>
+    function searchImages() {
+      const searchTerm = document.getElementById("searchInput").value;
+      const apiUrl = `https://serpapi.com/search.json?q=${searchTerm}&tbm=isch&api_key=24fff53431a26f5f746b38bb3412b3cfb84e594bed9545297ca335b53dcb9c6b;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const resultsContainer = document.getElementById("results");
+          resultsContainer.innerHTML = "";
+
+          data.images_results.forEach(result => {
+            const resultItem = document.createElement("div");
+            resultItem.classList.add("result-item");
+
+            const image = document.createElement("img");
+            image.src = result.thumbnail;
+            image.alt = result.title;
+
+            resultItem.appendChild(image);
+            resultsContainer.appendChild(resultItem);
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching images:", error);
+        });
+    }
+  </script>
+</body>
+</html>
